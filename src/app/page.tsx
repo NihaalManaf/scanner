@@ -8,9 +8,23 @@ export default function HomePage() {
 
   const [phrase, setPhrase] = useState<string>("");
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  const [serverAuthPhrase, setServerAuthPhrase] = useState<string | null>(null);
 
-  const handlePhraseSubmit = () => {
-    if (phrase === env.NEXT_PUBLIC_API_KEY) {
+  const handlePhraseSubmit = async () => {
+    const response = await fetch('/api/phrase', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': env.NEXT_PUBLIC_API_KEY || ''
+      },
+      body: JSON.stringify({ phrase })
+    });
+    if (response.status === 401) {
+      console.error('Unauthorized');
+      return;
+    }
+    const data = await response.json();
+    if (data.isAuthorized) {
       setIsAuthorized(true);
     } else {
       alert("Incorrect phrase. Please try again.");
