@@ -24,7 +24,7 @@ export default function HomePage() {
       return;
     }
     const data = await response.json();
-    if (data.isAuthorized) {
+    if (data.authorized) {
       setIsAuthorized(true);
     } else {
       alert("Incorrect phrase. Please try again.");
