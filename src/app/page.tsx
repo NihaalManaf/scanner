@@ -1,14 +1,16 @@
 "use client"
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import { env } from "~/env";
 import QRScanner from "~/component/QRScanner";
+
+interface AuthResponse {
+  authorized: boolean;
+}
 
 export default function HomePage() {
 
   const [phrase, setPhrase] = useState<string>("");
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
-  const [serverAuthPhrase, setServerAuthPhrase] = useState<string | null>(null);
 
   const handlePhraseSubmit = async () => {
     const response = await fetch('/api/phrase', {
@@ -23,7 +25,8 @@ export default function HomePage() {
       console.error('Unauthorized');
       return;
     }
-    const data = await response.json();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const data: AuthResponse = await response.json();
     if (data.authorized) {
       setIsAuthorized(true);
     } else {

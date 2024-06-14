@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { env } from "~/env";
 
 export async function POST(req: NextRequest) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { phrase } = await req.json();
   const apiKey = req.headers.get('x-api-key');
   const serverKey = env.SERVER_API_KEY;
