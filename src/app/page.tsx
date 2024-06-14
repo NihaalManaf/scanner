@@ -1,32 +1,41 @@
 "use client"
 import Link from "next/link";
-import { Html5QrcodeScanner } from "html5-qrcode";
+import { Html5QrcodeScanner, Html5QrcodeResult } from "html5-qrcode";
 import { useState, useEffect } from "react";
 
 export default function HomePage() {
 
-  const [result,setResult] = useState(null)
+  const [scanResult, setResult] = useState<string | null>(null);
 
   useEffect(()=>{
-    const scanner = new Html5QrcodeScanner('reader',{
-      qrbox:{
-        width:450,
-        height:450,
+    const scanner = new Html5QrcodeScanner(
+      'reader',
+      {
+        qrbox: {
+          width: 450,
+          height: 450,
+        },
+        fps: 24,
       },
-      fps:24,
-    })
+      false
+    );
 
-    const success = (result) => {
-      scanner.clear()
-      setResult(result)
-    }
+    const success = (result: string) => {
+      setResult(result);
+      console.log(scanResult)
+    };
+
+    const error = (err: string) => {
+      console.warn(err);
+    };
+
+    scanner.render(success, error);
   
-    const error = (err) => {
-      console.warn(err)
-    }
-    
-    scanner.render(success,error);
-  
+    return () => {
+      scanner.clear().catch(error => {
+          console.error("Failed to clear ", error);
+      });
+  };
  
   },[])
  
