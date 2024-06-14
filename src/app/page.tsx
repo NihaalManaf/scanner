@@ -12,10 +12,11 @@ export default function HomePage() {
       'reader',
       {
         qrbox: {
-          width: 450,
-          height: 450,
+          width: 250,
+          height: 250,
         },
         fps: 24,
+        disableFlip: false
       },
       false
     );
@@ -23,6 +24,7 @@ export default function HomePage() {
     const success = (result: string) => {
       setResult(result);
       console.log(scanResult)
+
     };
 
     const error = (err: string) => {
@@ -47,6 +49,7 @@ export default function HomePage() {
           Scanner <span className="text-[hsl(280,100%,70%)]">Auth</span> App
         </h1>
         <div className="w-96 flex flex-col justify-center items-center" id="reader"></div>
+        <h1> {scanResult} </h1>
       </div>
     </main>
   );
