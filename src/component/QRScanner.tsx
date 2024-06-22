@@ -58,24 +58,20 @@ const QRScanner = () => {
         );
     
         const processSuccess = async (result: string) => { 
-                
-                if (isProcessing || showResult) {
-                  scanner.pause()
-                  return;
-                  }; // Prevent multiple calls
 
-                setProcessing(true)
               
             await handleAuth(result).then(()=>{
               setProcessing(false)
             }); // Handle the scanned result
 
-            scanner.resume()
         };
 
         const success = (result: string) => {
-          //eslint-disable-next-line @typescript-eslint/no-floating-promises
-          processSuccess(result);
+          if (!isProcessing && !showResult) {
+            setProcessing(true)
+            //eslint-disable-next-line @typescript-eslint/no-floating-promises
+            processSuccess(result);
+          }
         };
     
         const error = (err: string) => {
@@ -97,6 +93,7 @@ const QRScanner = () => {
         {showResult && 
               (<TicketModal response={response} showResult={showResult} setShowResult={setShowResult} setPressed={setPressed}/>)
 }
+    
       
         </>
       );
