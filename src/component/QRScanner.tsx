@@ -64,8 +64,8 @@ const QRScanner = () => {
         }
 
         const success = (result: string) => {
-            // eslint-disable-next-line  @typescript-eslint/no-floating-promises
             if(!showResult){
+                          // eslint-disable-next-line  @typescript-eslint/no-floating-promises
             processSuccess(result)
             }
         };
