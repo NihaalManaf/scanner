@@ -17,7 +17,7 @@ const QRScanner = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [response, setResponse] = useState<responseType | null>(null);
  const[ifNextPressed, setPressed] = useState<boolean>(false);
- const [isProcessing, setIsProcessing] = useState<boolean>(false);
+ const [isProcessing, setProcessing] = useState<boolean>(false);
     const handleAuth = async (code:string) =>{
     
         const data = {
