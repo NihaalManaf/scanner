@@ -23,7 +23,7 @@ const QRScanner = () => {
         const data = {
           code: code
     };
-
+    if(!showResult){
     const res = await fetch('/api/check', {
       method: 'POST',
       headers: {
@@ -31,10 +31,12 @@ const QRScanner = () => {
       },
       body: JSON.stringify(data)
     });
+  
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const result: responseType = await res.json();
     setShowResult(true)
     setResponse(result)
+  }
   }
   
 
