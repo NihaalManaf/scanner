@@ -63,8 +63,6 @@ const QRScanner = () => {
                   scanner.pause()
                   return;
                   }; // Prevent multiple calls
-                  
-                  scanner.resume()
 
                 setProcessing(true)
               
@@ -72,6 +70,7 @@ const QRScanner = () => {
               setProcessing(false)
             }); // Handle the scanned result
 
+            scanner.resume()
         };
 
         const success = (result: string) => {
