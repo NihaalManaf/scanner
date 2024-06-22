@@ -16,7 +16,7 @@ interface responseType {
 const QRScanner = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [response, setResponse] = useState<responseType | null>(null);
-
+  const [isPaused,setPaused] = useState<boolean>(false);
 
   const handleConfirm = () => {
     setShowResult(false)
@@ -94,8 +94,16 @@ const QRScanner = () => {
           console.warn(err);
         };
 
-    
+        if(showResult){
+          scanner.pause();
+          setPaused(true);
+         }
+         if(isPaused){
+          scanner.resume();
+          setPaused(false);
+         }
          scanner.render(success, error);
+        
 
         return () => {
           scanner.clear().catch(error => {
