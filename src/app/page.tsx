@@ -38,7 +38,7 @@ export default function HomePage() {
     <main className="flex min-h-screen flex-col items-center bg-white text-black">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
         <h1 className="text-5xl font-extrabold tracking-tight text-black sm:text-[5rem]">
-          Ticket <span className="text-[hsl(280,100%,70%)]">Auth</span> Scanner
+           <span className="text-[hsl(280,100%,70%)]">Untamed</span> Ticket Scanner
         </h1>
 
         {!isAuthorized && (
