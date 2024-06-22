@@ -57,7 +57,7 @@ const QRScanner = () => {
           false
         );
     
-        const success = async (result: string) => {
+        const processSuccess = async (result: string) => {
           if (isProcessing) return; // Prevent multiple calls
     
           setIsProcessing(true); // Set processing flag
@@ -72,10 +72,12 @@ const QRScanner = () => {
             scanner.resume();
           }, 1000);
         };
-    
-        const error = (err: string) => {
-          console.warn(err);
+
+        const success = (result: string) => {
+          //eslint-disable-next-line @typescript-eslint/no-floating-promises
+          processSuccess(result);
         };
+    
     
         scanner.render(success, error);
     
