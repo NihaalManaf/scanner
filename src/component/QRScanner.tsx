@@ -18,6 +18,18 @@ const QRScanner = () => {
   const [response, setResponse] = useState<responseType | null>(null);
  const[ifNextPressed, setPressed] = useState<boolean>(false);
  const [isProcessing, setProcessing] = useState<boolean>(false);
+ const [scanner, setScanner] = useState<Html5QrcodeScanner>(new Html5QrcodeScanner(
+  'reader',
+  {
+    qrbox: {
+      width: 250,
+      height: 250,
+    },
+    fps: 10,
+    disableFlip: false
+  },
+  false
+));
 
  const getMessage = () => {
   if (response?.status !== 'valid') {
@@ -62,18 +74,6 @@ const success = (result: string) => {
   }
 };
 
-const scanner = new Html5QrcodeScanner(
-  'reader',
-  {
-    qrbox: {
-      width: 250,
-      height: 250,
-    },
-    fps: 10,
-    disableFlip: false
-  },
-  false
-);
 
 const error = (err: string) => {
   console.warn(err);
@@ -86,6 +86,21 @@ const error = (err: string) => {
  
     useEffect(() => {
     
+      const n_scanner = new Html5QrcodeScanner(
+        'reader',
+        {
+          qrbox: {
+            width: 250,
+            height: 250,
+          },
+          fps: 10,
+          disableFlip: false
+        },
+        false
+      );
+      
+      setScanner(n_scanner)
+
         scanner.render(success, error);
     
         return () => {
@@ -93,7 +108,7 @@ const error = (err: string) => {
             console.error("Failed to clear ", error);
           });
         };
-      }, []);
+      }, [scanner,success]);
 
       return(
         <>
