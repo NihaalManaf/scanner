@@ -16,14 +16,13 @@ interface responseType {
 const QRScanner = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [response, setResponse] = useState<responseType | null>(null);
- const[ifNextPressed, setPressed] = useState<boolean>(false);
- const [isProcessing, setProcessing] = useState<boolean>(false);
+
     const handleAuth = async (code:string) =>{
     
         const data = {
           code: code
     };
-    
+
     if(showResult){
       return;
     }
@@ -92,7 +91,7 @@ const QRScanner = () => {
         <>
         <div className="w-96 flex flex-col justify-center items-center" id="reader"></div>
         {showResult && 
-              (<TicketModal response={response} showResult={showResult} setShowResult={setShowResult} setPressed={setPressed}/>)
+              (<TicketModal response={response} showResult={showResult} setShowResult={setShowResult} />)
 }
     
       
