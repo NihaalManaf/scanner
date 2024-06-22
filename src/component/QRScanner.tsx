@@ -95,22 +95,12 @@ const QRScanner = () => {
         };
         scanner.render(success, error);
 
-        if(showResult){
-          scanner.pause();
-          setPaused(true);
-         }
-         if(isPaused && !showResult){
-          scanner.resume();
-          setPaused(false);
-         }
-        
-
         return () => {
           scanner.clear().catch(error => {
             console.error("Failed to clear ", error);
           });
         };
-      }, []);
+      }, [showResult]);
 
       return(
         <>
