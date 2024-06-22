@@ -59,20 +59,12 @@ const QRScanner = () => {
           false
         );
     
-        const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
         const processSuccess = async (result: string) => {               
             await handleAuth(result)
-             while(showResult){
-              await sleep(100)
-             }
         }
 
         const success = (result: string) => {
-          if (!isProcessing && !showResult) {
             // eslint-disable-next-line  @typescript-eslint/no-floating-promises
-            processSuccess(result);
-          }
         };
     
         const error = (err: string) => {
@@ -80,9 +72,7 @@ const QRScanner = () => {
         };
 
     
-        if(!showResult){
          scanner.render(success, error);
-        }
 
         return () => {
           scanner.clear().catch(error => {
