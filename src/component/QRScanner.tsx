@@ -37,7 +37,10 @@ const QRScanner = () => {
     setResponse(result)
   }
   
-
+  const processSuccess = async (result: string) => { 
+    await handleAuth(result)
+    setProcessing(false)
+};
 
   const handleConfirm = () => {
     setShowResult(false)
@@ -57,14 +60,6 @@ const QRScanner = () => {
           false
         );
     
-        const processSuccess = async (result: string) => { 
-
-              
-            await handleAuth(result).then(()=>{
-              setProcessing(false)
-            }); // Handle the scanned result
-
-        };
 
         const success = (result: string) => {
           if (!isProcessing && !showResult) {
