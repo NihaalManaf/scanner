@@ -98,7 +98,7 @@ const QRScanner = () => {
           scanner.pause();
           setPaused(true);
          }
-         if(isPaused){
+         if(isPaused && !showResult){
           scanner.resume();
           setPaused(false);
          }
