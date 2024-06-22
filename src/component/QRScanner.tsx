@@ -65,7 +65,9 @@ const QRScanner = () => {
 
         const success = (result: string) => {
             // eslint-disable-next-line  @typescript-eslint/no-floating-promises
+            if(!showResult){
             processSuccess(result)
+            }
         };
     
         const error = (err: string) => {
@@ -80,7 +82,7 @@ const QRScanner = () => {
             console.error("Failed to clear ", error);
           });
         };
-      }, []);
+      }, [showResult]);
 
       return(
         <>
