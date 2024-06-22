@@ -93,6 +93,7 @@ const QRScanner = () => {
         const error = (err: string) => {
           console.warn(err);
         };
+        scanner.render(success, error);
 
         if(showResult){
           scanner.pause();
@@ -102,7 +103,6 @@ const QRScanner = () => {
           scanner.resume();
           setPaused(false);
          }
-         scanner.render(success, error);
         
 
         return () => {
