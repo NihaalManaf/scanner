@@ -13,10 +13,11 @@ interface responseType {
 type TicketComponentProps = {
   response: responseType | null,
   showResult: boolean,
-  setShowResult: (value: boolean) => void
+  setShowResult: (value: boolean) => void,
+  setPressed: (value: boolean) => void,
 };
 
-const TicketModal: React.FC<TicketComponentProps> = ({ response, showResult, setShowResult }) => {
+const TicketModal: React.FC<TicketComponentProps> = ({ response, showResult, setShowResult, setPressed }) => {
 
     console.log(response)
   const getMessage = () => {
@@ -31,6 +32,7 @@ const TicketModal: React.FC<TicketComponentProps> = ({ response, showResult, set
 
   const handleConfirm = () => {
     setShowResult(false)
+    setPressed(true)
   }
 
   return showResult && (

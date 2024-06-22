@@ -14,10 +14,10 @@ interface responseType {
 }
 //true when they just got registered
 const QRScanner = () => {
-  const [isPaused, setPaused] = useState<boolean>(false);
   const [showResult, setShowResult] = useState<boolean>(false);
   const [response, setResponse] = useState<responseType | null>(null);
-
+ const[ifNextPressed, setPressed] = useState<boolean>(false);
+ 
     const handleAuth = async (code:string) =>{
     
         const data = {
@@ -58,15 +58,13 @@ const QRScanner = () => {
         );
     
         const processSuccess = async (result: string) => {    
-          if(showResult){
           scanner.pause()
-          }
-
-           handleAuth(result); // Handle the scanned result
+           await handleAuth(result); // Handle the scanned result
           // Pause scanning
           // Resume scanning after 2 seconds
-           if(!showResult){
+           if(ifNextPressed){
             scanner.resume()
+            setPressed(false)
            }
         };
 
@@ -92,7 +90,7 @@ const QRScanner = () => {
         <>
         <div className="w-96 flex flex-col justify-center items-center" id="reader"></div>
         {showResult && 
-              (<TicketModal response={response} showResult={showResult} setShowResult={setShowResult} />)
+              (<TicketModal response={response} showResult={showResult} setShowResult={setShowResult} setPressed={setPressed}/>)
 }
       
         </>
