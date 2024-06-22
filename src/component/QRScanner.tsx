@@ -14,7 +14,7 @@ interface responseType {
 }
 //true when they just got registered
 const QRScanner = () => {
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [isPaused, setPaused] = useState<boolean>(false);
   const [showResult, setShowResult] = useState<boolean>(false);
   const [response, setResponse] = useState<responseType | null>(null);
     const handleAuth = async (code:string) =>{
@@ -57,20 +57,19 @@ const QRScanner = () => {
           false
         );
     
-        const processSuccess = async (result: string) => {
-          if (isProcessing) return; // Prevent multiple calls
-    
-          setIsProcessing(true); // Set processing flag
+        const processSuccess = async (result: string) => {    
+          setPaused(true); // Set processing flag
           await handleAuth(result); // Handle the scanned result
     
           // Pause scanning
-          scanner.pause();
-    
+          if(showResult && setPaused){
+           scanner.pause();
+          }
+
           // Resume scanning after 2 seconds
-          setTimeout(() => {
-            setIsProcessing(false); // Reset processing flag
-            scanner.resume();
-          }, 1000);
+           if(isPaused && !showResult){
+            scanner.resume()
+           }
         };
 
         const success = (result: string) => {
