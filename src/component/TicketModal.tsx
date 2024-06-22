@@ -18,6 +18,7 @@ type TicketComponentProps = {
 
 const TicketModal: React.FC<TicketComponentProps> = ({ response, showResult, setShowResult }) => {
 
+    console.log(response)
   const getMessage = () => {
     if (response?.status !== 'valid') {
       return 'Invalid QR';

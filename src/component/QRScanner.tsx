@@ -34,7 +34,6 @@ const QRScanner = () => {
     const result: responseType = await res.json();
     setShowResult(true)
     setResponse(result)
-    console.log(response)
   }
   
 
@@ -62,13 +61,14 @@ const QRScanner = () => {
           await handleAuth(result); // Handle the scanned result
     
           // Pause scanning
-          if(showResult && !isPaused){
+          if(showResult){
            scanner.pause();
           }
 
           // Resume scanning after 2 seconds
            if(isPaused && !showResult){
             scanner.resume()
+            setPaused(false)
            }
         };
 
