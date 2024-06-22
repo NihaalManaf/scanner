@@ -97,7 +97,8 @@ const error = (err: string) => {
 
       return(
         <>
-        <div className="w-96 flex flex-col justify-center items-center" id="reader"></div>
+        <div  id="reader" className="w-96 flex flex-col justify-center items-center"></div>
+
         {showResult && 
               (<div
                 className={`fixed top-0 left-0 w-full h-full flex justify-center items-center ${
