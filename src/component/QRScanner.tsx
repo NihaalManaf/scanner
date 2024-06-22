@@ -80,7 +80,7 @@ const QRScanner = () => {
             console.error("Failed to clear ", error);
           });
         };
-      }, [handleAuth]);
+      }, []);
 
       return(
         <>
