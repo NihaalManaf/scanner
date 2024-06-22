@@ -23,7 +23,11 @@ const QRScanner = () => {
         const data = {
           code: code
     };
-    if(!showResult){
+    
+    if(showResult){
+      return;
+    }
+
     const res = await fetch('/api/check', {
       method: 'POST',
       headers: {
@@ -36,7 +40,7 @@ const QRScanner = () => {
     const result: responseType = await res.json();
     setShowResult(true)
     setResponse(result)
-  }
+  
   }
   
 
@@ -82,7 +86,7 @@ const QRScanner = () => {
             console.error("Failed to clear ", error);
           });
         };
-      }, [showResult]);
+      }, []);
 
       return(
         <>
