@@ -51,7 +51,7 @@ const QRScanner = () => {
               width: 250,
               height: 250,
             },
-            fps: 24,
+            fps: 10,
             disableFlip: false
           },
           false
@@ -60,6 +60,11 @@ const QRScanner = () => {
         const success = (result: string) => {
            //eslint-disable-next-line @typescript-eslint/no-floating-promises 
           handleAuth(result);
+          scanner.pause();
+
+          setTimeout(() => {
+            scanner.resume();
+          }, 1000);
         };
     
         const error = (err: string) => {
