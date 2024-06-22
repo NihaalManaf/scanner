@@ -78,6 +78,9 @@ const QRScanner = () => {
           processSuccess(result);
         };
     
+        const error = (err: string) => {
+          console.warn(err);
+        };
     
         scanner.render(success, error);
     
