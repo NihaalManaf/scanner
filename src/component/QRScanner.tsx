@@ -68,7 +68,7 @@ const QRScanner = () => {
 
         const success = (result: string) => {
           if (!isProcessing && !showResult) {
-            scanner.pause
+            // eslint-disable-next-line  @typescript-eslint/no-floating-promises
             processSuccess(result);
           }
         };
