@@ -25,21 +25,21 @@ const QRScanner = () => {
 
     if(showResult){
       return;
-    }
+    }else{
 
-    const res = await fetch('/api/check', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-  
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const result: responseType = await res.json();
-    setShowResult(true)
-    setResponse(result)
-  
+      const res = await fetch('/api/check', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+    
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const result: responseType = await res.json();
+      setShowResult(true)
+      setResponse(result)
+   }
   }
   
 
@@ -62,15 +62,16 @@ const QRScanner = () => {
           false
         );
     
-        const processSuccess = async (result: string) => {               
-            await handleAuth(result)
+        const processSuccess =  (result: string) => {      
+         if(!showResult){
+                                    // eslint-disable-next-line  @typescript-eslint/no-floating-promises
+             handleAuth(result)
+         }
         }
 
         const success = (result: string) => {
-            if(!showResult){
                           // eslint-disable-next-line  @typescript-eslint/no-floating-promises
             processSuccess(result)
-            }
         };
     
         const error = (err: string) => {
