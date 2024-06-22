@@ -59,7 +59,7 @@ const QRScanner = () => {
     
         const processSuccess = async (result: string) => { 
                 
-                if (isProcessing) {
+                if (isProcessing || showResult) {
                   return;
                   }; // Prevent multiple calls
 
