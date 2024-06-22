@@ -77,14 +77,15 @@ const QRScanner = () => {
           console.warn(err);
         };
     
-        scanner.render(success, error);
-    
+        if(!showResult){
+         scanner.render(success, error);
+        }
         return () => {
           scanner.clear().catch(error => {
             console.error("Failed to clear ", error);
           });
         };
-      }, []);
+      }, [showResult]);
 
       return(
         <>
