@@ -33,15 +33,21 @@ const QRScanner = () => {
   };
 
 
+    const handleGateway = (code:string) => {
+      if(showResult){
+        setShowResult(true)
+        return;
+      }else{
+      // eslint-disable-next-line  @typescript-eslint/no-floating-promises
+        handleAuth(code)
+      }
+    }
+
     const handleAuth = async (code:string) =>{
     
         const data = {
           code: code
     };
-
-    if(showResult){
-      return;
-    }else{
 
       const res = await fetch('/api/check', {
         method: 'POST',
@@ -55,7 +61,7 @@ const QRScanner = () => {
       const result: responseType = await res.json();
       setShowResult(true)
       setResponse(result)
-   }
+   
   }
   
   
@@ -75,10 +81,8 @@ const QRScanner = () => {
         );
     
         const processSuccess =  (result: string) => {      
-         if(!showResult){
                                     // eslint-disable-next-line  @typescript-eslint/no-floating-promises
-             handleAuth(result)
-         }
+             handleGateway(result)
         }
 
         const success = (result: string) => {
