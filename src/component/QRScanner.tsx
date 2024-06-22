@@ -62,7 +62,7 @@ const QRScanner = () => {
           await handleAuth(result); // Handle the scanned result
     
           // Pause scanning
-          if(showResult && setPaused){
+          if(showResult && !isPaused){
            scanner.pause();
           }
 
