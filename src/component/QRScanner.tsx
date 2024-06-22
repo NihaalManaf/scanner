@@ -17,7 +17,7 @@ const QRScanner = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [response, setResponse] = useState<responseType | null>(null);
  const[ifNextPressed, setPressed] = useState<boolean>(false);
-
+ const [isProcessing, setIsProcessing] = useState<boolean>(false);
     const handleAuth = async (code:string) =>{
     
         const data = {
@@ -59,14 +59,18 @@ const QRScanner = () => {
     
         const processSuccess = async (result: string) => { 
                 
-                if (ifNextPressed) return; // Prevent multiple calls
+                if (isProcessing) return; // Prevent multiple calls
 
-                setPressed(true); // Set processing flag
+                setProcessing(true)
                 scanner.pause();
             await handleAuth(result); // Handle the scanned result
 
             // Pause scanning
-            
+           if(ifNextPressed){
+            scanner.resume()
+            setProcessing(false)
+            setPressed(false)
+           }
         };
 
         const success = (result: string) => {
