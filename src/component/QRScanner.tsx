@@ -14,7 +14,7 @@ interface responseType {
 }
 //true when they just got registered
 const QRScanner = () => {
-
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [showResult, setShowResult] = useState<boolean>(false);
   const [response, setResponse] = useState<responseType | null>(null);
     const handleAuth = async (code:string) =>{
@@ -57,12 +57,18 @@ const QRScanner = () => {
           false
         );
     
-        const success = (result: string) => {
-           //eslint-disable-next-line @typescript-eslint/no-floating-promises 
-          handleAuth(result);
+        const success = async (result: string) => {
+          if (isProcessing) return; // Prevent multiple calls
+    
+          setIsProcessing(true); // Set processing flag
+          await handleAuth(result); // Handle the scanned result
+    
+          // Pause scanning
           scanner.pause();
-
+    
+          // Resume scanning after 2 seconds
           setTimeout(() => {
+            setIsProcessing(false); // Reset processing flag
             scanner.resume();
           }, 1000);
         };
