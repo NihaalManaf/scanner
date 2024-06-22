@@ -59,11 +59,15 @@ const QRScanner = () => {
     
         const processSuccess = async (result: string) => { 
                 
-                if (isProcessing) return; // Prevent multiple calls
+                if (isProcessing) {
+                  scanner.pause()
+                  return}; // Prevent multiple calls
 
                 setProcessing(true)
-                scanner.pause();
+              
             await handleAuth(result); // Handle the scanned result
+
+
 
             // Pause scanning
            if(ifNextPressed){
