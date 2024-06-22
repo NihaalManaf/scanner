@@ -15,7 +15,7 @@ interface responseType {
 //true when they just got registered
 const QRScanner = () => {
 
-  const [showResult, setShowResult] = useState<boolean>(true);
+  const [showResult, setShowResult] = useState<boolean>(false);
   const [response, setResponse] = useState<responseType | null>(null);
     const handleAuth = async (code:string) =>{
     
