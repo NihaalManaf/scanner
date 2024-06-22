@@ -17,6 +17,22 @@ const QRScanner = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [response, setResponse] = useState<responseType | null>(null);
 
+
+  const handleConfirm = () => {
+    setShowResult(false)
+  }
+
+  const getMessage = () => {
+    if (response?.status !== 'valid') {
+      return 'Invalid QR';
+    } else if (response?.status === 'valid' && !response?.enterStatus) {
+      return 'Already Entered';
+    } else {
+      return 'Good to Enter';
+    }
+  };
+
+
     const handleAuth = async (code:string) =>{
     
         const data = {
@@ -42,6 +58,8 @@ const QRScanner = () => {
    }
   }
   
+  
+
     useEffect(() => {
         const scanner = new Html5QrcodeScanner(
           'reader',
