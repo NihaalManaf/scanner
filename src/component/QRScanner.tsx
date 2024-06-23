@@ -82,8 +82,13 @@ const QRScanner = () => {
     
         const processSuccess =  (result: string) => {      
                                     // eslint-disable-next-line  @typescript-eslint/no-floating-promises
+                                    if(scanner.getState()==Html5QrcodeScannerState.PAUSED && !showResult){
+                                      scanner.resume()
+                                      
+                                    }else{
                                     scanner.pause()
              handleGateway(result)
+                                    }
         }
 
         const success = (result: string) => {
@@ -98,11 +103,9 @@ const QRScanner = () => {
 
         scanner.render(success, error);
 
-        
+
         const check = (scanner : Html5QrcodeScanner) => {
-          if(scanner.getState()==Html5QrcodeScannerState.PAUSED && !showResult){
-            scanner.resume()
-          }
+         
         }       
 
 
