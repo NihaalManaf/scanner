@@ -44,7 +44,7 @@ const QRScanner = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
-
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const result: responseType = await res.json();
         setShowResult(true);
         setResponse(result);
@@ -74,6 +74,7 @@ const QRScanner = () => {
     const success = (result: string) => {
       if (!showResult && result !== lastScannedCode.current && !isPending) {
         lastScannedCode.current = result;
+                                      // eslint-disable-next-line  @typescript-eslint/no-floating-promises
         void processSuccess(result); // Explicitly ignore promise result
       }
     };
