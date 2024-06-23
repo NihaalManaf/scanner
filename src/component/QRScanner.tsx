@@ -1,7 +1,6 @@
 "use client"
-import { Html5QrcodeScanner, Html5QrcodeResult } from "html5-qrcode";
+import { Html5QrcodeScanner, Html5QrcodeScannerState, Html5QrcodeScanType } from "html5-qrcode";
 import { useState, useEffect } from "react";
-import TicketModal from "./TicketModal";
 
 interface responseType {
   status:string,
@@ -64,6 +63,11 @@ const QRScanner = () => {
    
   }
   
+  const check = (scanner : Html5QrcodeScanner){
+    if(scanner.getState()==Html5QrcodeScannerState.PAUSED && !showResult){
+      scanner.resume()
+    }
+  }
   
 
     useEffect(() => {
@@ -75,13 +79,16 @@ const QRScanner = () => {
               height: 250,
             },
             fps: 10,
-            disableFlip: false
+            disableFlip: false,
+            rememberLastUsedCamera: true,
+            supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
           },
-          false
+          false,
         );
     
         const processSuccess =  (result: string) => {      
                                     // eslint-disable-next-line  @typescript-eslint/no-floating-promises
+                                    scanner.pause()
              handleGateway(result)
         }
 
@@ -93,14 +100,17 @@ const QRScanner = () => {
         const error = (err: string) => {
           console.warn(err);
         };
+
+        check(scanner)
         scanner.render(success, error);
+
 
         return () => {
           scanner.clear().catch(error => {
             console.error("Failed to clear ", error);
           });
         };
-      }, [showResult]);
+      }, []);
 
       return(
         <>
