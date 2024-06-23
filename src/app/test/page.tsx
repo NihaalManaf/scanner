@@ -12,14 +12,9 @@ interface responseType {
   ticket_number:string,
 }
 //true when they just got registered
-const QRScanner = () => {
+const test = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [response, setResponse] = useState<responseType | null>(null);
-  const [prevQr, setQR] = useState<string|null>(null);
-
-  const handleConfirm = () => {
-    setShowResult(false)
-  }
 
   const getMessage = () => {
     if (response?.status !== 'valid') {
@@ -32,13 +27,25 @@ const QRScanner = () => {
   };
 
 
+    const handleGateway = (code:string) => {
+      if(showResult){
+        setShowResult(true)
+        return;
+      }else{
+      // eslint-disable-next-line  @typescript-eslint/no-floating-promises
+        handleAuth(code)
+      }
+    }
+
     const handleAuth = async (fromqr:string) =>{
     
+
+        console.log(fromqr)
+
         const data = {
           code: fromqr
     };
 
-    if(prevQr != fromqr || prevQr == null){
       const res = await fetch('/api/check', {
         method: 'POST',
         headers: {
@@ -49,54 +56,16 @@ const QRScanner = () => {
     
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const result: responseType = await res.json();
-      setQR(fromqr)
       setShowResult(true)
       setResponse(result)
-    }
+      console.log(response)
   }
+
+
     
+        // eslint-disable-next-line  @typescript-eslint/no-floating-promises
+  handleAuth("Kr3qtgQuZ1NE0fZSCkhI")
 
-    useEffect(() => {
-        const scanner = new Html5QrcodeScanner(
-          'reader',
-          {
-            qrbox: {
-              width: 250,
-              height: 250,
-            },
-            fps: 10,
-            disableFlip: false,
-            rememberLastUsedCamera: true,
-            supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
-          },
-          false,
-        );
-    
-        const processSuccess =  async (result: string) => {      
-                                    // eslint-disable-next-line  @typescript-eslint/no-floating-promises
-              await handleAuth(result)
-        }
-
-        const success = (result: string) => {
-                          // eslint-disable-next-line  @typescript-eslint/no-floating-promises
-            processSuccess(result)
-        };
-    
-        const error = (err: string) => {
-          console.warn(err);
-        };
-
-
-        scanner.render(success, error);
-
-
-
-        return () => {
-          scanner.clear().catch(error => {
-            console.error("Failed to clear ", error);
-          });
-        };
-      }, [showResult]);
 
       return(
         <>
@@ -116,7 +85,6 @@ const QRScanner = () => {
                   <p className="font-bold text-2xl text-center m-8"> {getMessage()}</p>
                   <button
                         className="bg-black text-white px-4 py-2 rounded-lg shadow-lg transform transition-transform duration-200 hover:shadow-xl active:scale-95 mr-2"
-                        onClick={handleConfirm}
                       >
                          Next
                       </button>
@@ -129,4 +97,4 @@ const QRScanner = () => {
       );
 }
 
-export default QRScanner
+export default test

@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const result: ResponseType = await response.json();
-    console.log(response)
+   // console.log(response)
 
     return new NextResponse(JSON.stringify(result), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
