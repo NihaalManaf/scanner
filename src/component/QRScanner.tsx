@@ -62,13 +62,7 @@ const QRScanner = () => {
       setResponse(result)
    
   }
-  
-  const check = (scanner : Html5QrcodeScanner) => {
-    if(scanner.getState()==Html5QrcodeScannerState.PAUSED && !showResult){
-      scanner.resume()
-    }
-  }
-  
+    
 
     useEffect(() => {
         const scanner = new Html5QrcodeScanner(
@@ -101,8 +95,15 @@ const QRScanner = () => {
           console.warn(err);
         };
 
-        check(scanner)
+
         scanner.render(success, error);
+
+        
+        const check = (scanner : Html5QrcodeScanner) => {
+          if(scanner.getState()==Html5QrcodeScannerState.PAUSED && !showResult){
+            scanner.resume()
+          }
+        }       
 
 
         return () => {
