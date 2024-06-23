@@ -15,15 +15,13 @@ interface responseType {
 const QRScanner = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [response, setResponse] = useState<responseType | null>(null);
-  const [prevQr, setQR] = useState<string>("");
   const [isPending, setIsPending] = useState<boolean>(false);
-  const [scanning, setScanning] = useState<boolean>(false);
-  const scanTimeout = useRef<NodeJS.Timeout | null>(null);
-
+  const lastScannedCode = useRef<string | null>(null);
+  
   const handleConfirm = () => {
     setShowResult(false);
-    setIsPending(false); // Allow new scans
-    setScanning(false); // Reset scanning state
+    setIsPending(false);
+    lastScannedCode.current = null; // Reset the last scanned code
   };
 
   const getMessage = () => {
@@ -74,19 +72,10 @@ const QRScanner = () => {
     };
 
     const success = (result: string) => {
-      if (prevQr !== result && !isPending && !scanning) {
-        setQR(result);
-        setScanning(true); // Set scanning to true to avoid multiple scans
-        // eslint-disable-next-line  @typescript-eslint/no-floating-promises
+      if (result !== lastScannedCode.current && !isPending) {
+        lastScannedCode.current = result;
+                                      // eslint-disable-next-line  @typescript-eslint/no-floating-promises
         void processSuccess(result); // Explicitly ignore promise result
-
-        if (scanTimeout.current) {
-          clearTimeout(scanTimeout.current);
-        }
-
-        scanTimeout.current = setTimeout(() => {
-          setScanning(false); // Allow scanning again after timeout
-        }, 3000); // Set timeout for 3 seconds
       }
     };
 
@@ -100,12 +89,8 @@ const QRScanner = () => {
       scanner.clear().catch(error => {
         console.error("Failed to clear", error);
       });
-
-      if (scanTimeout.current) {
-        clearTimeout(scanTimeout.current);
-      }
     };
-  }, []);
+  }, [])
 
       return(
         <>
