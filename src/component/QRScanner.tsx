@@ -17,10 +17,13 @@ const QRScanner = () => {
   const [response, setResponse] = useState<responseType | null>(null);
   const [prevQr, setQR] = useState<string>("");
   const [isPending, setIsPending] = useState<boolean>(false);
-  
+  const [scanning, setScanning] = useState<boolean>(false);
+  const scanTimeout = useRef<NodeJS.Timeout | null>(null);
+
   const handleConfirm = () => {
     setShowResult(false);
     setIsPending(false); // Allow new scans
+    setScanning(false); // Reset scanning state
   };
 
   const getMessage = () => {
@@ -36,16 +39,20 @@ const QRScanner = () => {
   useEffect(() => {
     const handleAuth = async (fromqr: string) => {
       const data = { code: fromqr };
-      if (!isPending) {
+
+      try {
         const res = await fetch('/api/check', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
         const result: responseType = await res.json();
         setShowResult(true);
         setResponse(result);
+      } catch (error) {
+        console.error("Failed to fetch", error);
+        // Optionally set error state here
       }
     };
 
@@ -67,16 +74,18 @@ const QRScanner = () => {
     };
 
     const success = (result: string) => {
-      if(scanner.getState()==Html5QrcodeScannerState.PAUSED){
-         scanner.resume()
-      }else{
-         scanner.pause(showResult)
-      }
-      
-      if (prevQr !== result && !isPending) {
+      if (prevQr !== result && !isPending && !scanning) {
         setQR(result);
-       // eslint-disable-next-line  @typescript-eslint/no-floating-promises
-        processSuccess(result)
+        setScanning(true); // Set scanning to true to avoid multiple scans
+        void processSuccess(result); // Explicitly ignore promise result
+
+        if (scanTimeout.current) {
+          clearTimeout(scanTimeout.current);
+        }
+
+        scanTimeout.current = setTimeout(() => {
+          setScanning(false); // Allow scanning again after timeout
+        }, 3000); // Set timeout for 3 seconds
       }
     };
 
@@ -88,10 +97,14 @@ const QRScanner = () => {
 
     return () => {
       scanner.clear().catch(error => {
-        console.error("Failed to clear ", error);
+        console.error("Failed to clear", error);
       });
+
+      if (scanTimeout.current) {
+        clearTimeout(scanTimeout.current);
+      }
     };
-  }, []);
+  }, [isPending, prevQr]);
 
       return(
         <>
