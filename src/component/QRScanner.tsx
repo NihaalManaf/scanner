@@ -46,6 +46,7 @@ const QRScanner = () => {
       const result: responseType = await res.json();
       setShowResult(true);
       setResponse(result);
+      alert("Continue")
     };
 
     const scanner = new Html5QrcodeScanner(
@@ -84,7 +85,7 @@ const QRScanner = () => {
         console.error("Failed to clear ", error);
       });
     };
-  }, [isPending, prevQr]);
+  }, []);
 
       return(
         <>
@@ -102,12 +103,7 @@ const QRScanner = () => {
                   <p className='mt-4'> <b>Name</b> : {response?.name} # <b>{response?.ticket_number} </b> </p>
                   </div>
                   <p className="font-bold text-2xl text-center m-8"> {getMessage()}</p>
-                  <button
-                        className="bg-black text-white px-4 py-2 rounded-lg shadow-lg transform transition-transform duration-200 hover:shadow-xl active:scale-95 mr-2"
-                        onClick={handleConfirm}
-                      >
-                         Next
-                      </button>
+                  
                 </div>
               </div>)
 }
