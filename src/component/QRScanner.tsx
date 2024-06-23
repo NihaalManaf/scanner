@@ -104,11 +104,6 @@ const QRScanner = () => {
         scanner.render(success, error);
 
 
-        const check = (scanner : Html5QrcodeScanner) => {
-         
-        }       
-
-
         return () => {
           scanner.clear().catch(error => {
             console.error("Failed to clear ", error);
