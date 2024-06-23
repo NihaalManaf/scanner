@@ -105,7 +105,7 @@ const QRScanner = () => {
         clearTimeout(scanTimeout.current);
       }
     };
-  }, [isPending, prevQr]);
+  }, []);
 
       return(
         <>
