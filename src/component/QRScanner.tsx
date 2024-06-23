@@ -36,17 +36,19 @@ const QRScanner = () => {
   useEffect(() => {
     const handleAuth = async (fromqr: string) => {
       const data = { code: fromqr };
+     
 
-      const res = await fetch('/api/check', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const result: responseType = await res.json();
-      setShowResult(true);
-      setResponse(result);
-      alert("Continue")
+      if (prevQr !== fromqr && !isPending) {
+        const res = await fetch('/api/check', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const result: responseType = await res.json();
+        setShowResult(true);
+        setResponse(result);
+      }
     };
 
     const scanner = new Html5QrcodeScanner(
@@ -68,9 +70,9 @@ const QRScanner = () => {
 
     const success = (result: string) => {
       if (prevQr !== result && !isPending) {
-        setQR(result);
-        // eslint-disable-next-line  @typescript-eslint/no-floating-promises
+       // eslint-disable-next-line  @typescript-eslint/no-floating-promises
         processSuccess(result)
+        setQR(result);
       }
     };
 
@@ -79,6 +81,7 @@ const QRScanner = () => {
     };
 
     scanner.render(success, error);
+    
 
     return () => {
       scanner.clear().catch(error => {
