@@ -32,16 +32,6 @@ const QRScanner = () => {
   };
 
 
-    const handleGateway = (code:string) => {
-      if(showResult){
-        setShowResult(true)
-        return;
-      }else{
-      // eslint-disable-next-line  @typescript-eslint/no-floating-promises
-        handleAuth(code)
-      }
-    }
-
     const handleAuth = async (fromqr:string) =>{
     
         const data = {
@@ -80,9 +70,9 @@ const QRScanner = () => {
           false,
         );
     
-        const processSuccess =  (result: string) => {      
+        const processSuccess =  async (result: string) => {      
                                     // eslint-disable-next-line  @typescript-eslint/no-floating-promises
-             handleGateway(result)
+              await handleAuth(result)
         }
 
         const success = (result: string) => {
