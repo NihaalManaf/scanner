@@ -46,7 +46,7 @@ const QRScanner = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
-
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const result: responseType = await res.json();
         setShowResult(true);
         setResponse(result);
@@ -77,6 +77,7 @@ const QRScanner = () => {
       if (prevQr !== result && !isPending && !scanning) {
         setQR(result);
         setScanning(true); // Set scanning to true to avoid multiple scans
+        // eslint-disable-next-line  @typescript-eslint/no-floating-promises
         void processSuccess(result); // Explicitly ignore promise result
 
         if (scanTimeout.current) {
