@@ -33,7 +33,8 @@ const QRScanner = () => {
   };
 
 
-    const handleAuth = async (fromqr:string) =>{
+    useEffect(() => {
+            const handleAuth = async (fromqr:string) =>{
     
         const data = {
           code: fromqr
@@ -55,7 +56,6 @@ const QRScanner = () => {
   }
     
 
-    useEffect(() => {
         const scanner = new Html5QrcodeScanner(
           'reader',
           {
