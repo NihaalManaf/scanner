@@ -63,7 +63,7 @@ const QRScanner = () => {
    
   }
   
-  const check = (scanner : Html5QrcodeScanner){
+  const check = (scanner : Html5QrcodeScanner) => {
     if(scanner.getState()==Html5QrcodeScannerState.PAUSED && !showResult){
       scanner.resume()
     }
