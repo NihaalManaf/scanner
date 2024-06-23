@@ -1,6 +1,6 @@
 "use client"
 import { Html5QrcodeScanner, Html5QrcodeScannerState, Html5QrcodeScanType } from "html5-qrcode";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef} from "react";
 
 interface responseType {
   status:string,
@@ -16,7 +16,8 @@ const QRScanner = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [response, setResponse] = useState<responseType | null>(null);
   const [prevQr, setQR] = useState<string>("");
-
+  const countResults = useRef<number>(0);
+  
   const handleConfirm = () => {
     setShowResult(false)
   }
@@ -38,7 +39,6 @@ const QRScanner = () => {
           code: fromqr
     };
 
-    if(prevQr != fromqr || prevQr == null){
       const res = await fetch('/api/check', {
         method: 'POST',
         headers: {
@@ -49,10 +49,9 @@ const QRScanner = () => {
     
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const result: responseType = await res.json();
-      setQR(fromqr)
       setShowResult(true)
       setResponse(result)
-    }
+
   }
     
 
@@ -77,8 +76,10 @@ const QRScanner = () => {
               await handleAuth(result)
         }
 
-        const success = (result: string) => {
+        const success = ( result: string) => {
                           if(prevQr !== result){
+                            ++countResults.current;
+                            setQR(result)
                               // eslint-disable-next-line  @typescript-eslint/no-floating-promises
                                processSuccess(result)
                           }
@@ -98,7 +99,7 @@ const QRScanner = () => {
             console.error("Failed to clear ", error);
           });
         };
-      }, [showResult]);
+      }, []);
 
       return(
         <>
