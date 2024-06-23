@@ -36,9 +36,7 @@ const QRScanner = () => {
   useEffect(() => {
     const handleAuth = async (fromqr: string) => {
       const data = { code: fromqr };
-     
-
-      if (prevQr !== fromqr && !isPending) {
+      if (!isPending) {
         const res = await fetch('/api/check', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -70,9 +68,9 @@ const QRScanner = () => {
 
     const success = (result: string) => {
       if (prevQr !== result && !isPending) {
+        setQR(result);
        // eslint-disable-next-line  @typescript-eslint/no-floating-promises
         processSuccess(result)
-        setQR(result);
       }
     };
 
@@ -106,7 +104,12 @@ const QRScanner = () => {
                   <p className='mt-4'> <b>Name</b> : {response?.name} # <b>{response?.ticket_number} </b> </p>
                   </div>
                   <p className="font-bold text-2xl text-center m-8"> {getMessage()}</p>
-                  
+                  <button
+                        className="bg-black text-white px-4 py-2 rounded-lg shadow-lg transform transition-transform duration-200 hover:shadow-xl active:scale-95 mr-2"
+                        onClick={handleConfirm}
+                      >
+                         Next
+                      </button>
                 </div>
               </div>)
 }
