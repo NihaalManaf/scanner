@@ -42,10 +42,10 @@ const QRScanner = () => {
       }
     }
 
-    const handleAuth = async (code:string) =>{
+    const handleAuth = async (fromqr:string) =>{
     
         const data = {
-          code: code
+          code: fromqr
     };
 
       const res = await fetch('/api/check', {
