@@ -15,7 +15,7 @@ interface responseType {
 const QRScanner = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [response, setResponse] = useState<responseType | null>(null);
-  const [prevQr, setQR] = useState<string|null>(null);
+  const [prevQr, setQR] = useState<string>("");
 
   const handleConfirm = () => {
     setShowResult(false)
@@ -78,8 +78,10 @@ const QRScanner = () => {
         }
 
         const success = (result: string) => {
-                          // eslint-disable-next-line  @typescript-eslint/no-floating-promises
-            processSuccess(result)
+                          if(prevQr !== result){
+                              // eslint-disable-next-line  @typescript-eslint/no-floating-promises
+                               processSuccess(result)
+                          }
         };
     
         const error = (err: string) => {
