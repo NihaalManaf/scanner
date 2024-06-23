@@ -16,11 +16,12 @@ const QRScanner = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [response, setResponse] = useState<responseType | null>(null);
   const [prevQr, setQR] = useState<string>("");
-  const countResults = useRef<number>(0);
+  const [isPending, setIsPending] = useState<boolean>(false);
   
   const handleConfirm = () => {
-    setShowResult(false)
-  }
+    setShowResult(false);
+    setIsPending(false); // Allow new scans
+  };
 
   const getMessage = () => {
     if (response?.status !== 'valid') {
@@ -32,74 +33,58 @@ const QRScanner = () => {
     }
   };
 
-
-    useEffect(() => {
-            const handleAuth = async (fromqr:string) =>{
-    
-        const data = {
-          code: fromqr
-    };
+  useEffect(() => {
+    const handleAuth = async (fromqr: string) => {
+      const data = { code: fromqr };
 
       const res = await fetch('/api/check', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
     
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const result: responseType = await res.json();
-      setShowResult(true)
-      setResponse(result)
+      setShowResult(true);
+      setResponse(result);
+    };
 
-  }
-    
+    const scanner = new Html5QrcodeScanner(
+      'reader',
+      {
+        qrbox: { width: 250, height: 250 },
+        fps: 10,
+        disableFlip: false,
+        rememberLastUsedCamera: true,
+        supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
+      },
+      false,
+    );
 
-        const scanner = new Html5QrcodeScanner(
-          'reader',
-          {
-            qrbox: {
-              width: 250,
-              height: 250,
-            },
-            fps: 10,
-            disableFlip: false,
-            rememberLastUsedCamera: true,
-            supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
-          },
-          false,
-        );
-    
-        const processSuccess =  async (result: string) => {      
-                                    // eslint-disable-next-line  @typescript-eslint/no-floating-promises
-              await handleAuth(result)
-        }
+    const processSuccess = async (result: string) => {
+      setIsPending(true);
+      await handleAuth(result);
+    };
 
-        const success = ( result: string) => {
-                          if(prevQr !== result){
-                            ++countResults.current;
-                            setQR(result)
-                              // eslint-disable-next-line  @typescript-eslint/no-floating-promises
-                               processSuccess(result)
-                          }
-        };
-    
-        const error = (err: string) => {
-          console.warn(err);
-        };
+    const success = (result: string) => {
+      if (prevQr !== result && !isPending) {
+        setQR(result);
+        // eslint-disable-next-line  @typescript-eslint/no-floating-promises
+        processSuccess(result)
+      }
+    };
 
+    const error = (err: string) => {
+      console.warn(err);
+    };
 
-        scanner.render(success, error);
+    scanner.render(success, error);
 
-
-
-        return () => {
-          scanner.clear().catch(error => {
-            console.error("Failed to clear ", error);
-          });
-        };
-      }, []);
+    return () => {
+      scanner.clear().catch(error => {
+        console.error("Failed to clear ", error);
+      });
+    };
+  }, [isPending, prevQr]);
 
       return(
         <>
