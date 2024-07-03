@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
       qr: code
     };
 
-    const response = await fetch("https://suntamed-f34d18fb4c60.herokuapp.com/scan", {
+    const response = await fetch("https://demobot-28d0f49ecd8f.herokuapp.com/scan", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
