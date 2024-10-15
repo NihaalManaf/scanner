@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { env } from "~/env";
 import QRScanner from "~/component/QRScanner";
+import QRScanner2 from "~/component/QRScanner2";
 
 interface AuthResponse {
   authorized: boolean;
@@ -59,7 +60,7 @@ export default function HomePage() {
           </div>
         )}
 
-        {isAuthorized && (<QRScanner />)}
+        {isAuthorized && (<QRScanner2 />)}
 
       </div>
     </main>
