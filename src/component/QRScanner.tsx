@@ -55,17 +55,17 @@ const QRScanner = () => {
     };
 
     const scanner = new Html5QrcodeScanner(
-      'reader',
+      "reader",
       {
-        qrbox: { width: 250, height: 250 },
-        fps: 10,
-        disableFlip: false,
-        rememberLastUsedCamera: true,
-        supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
+        qrbox: { width: 200, height: 200 }, // Reduce scan area
+        fps: 15, // Increase FPS for faster scanning
+        disableFlip: true, // Disable flip for better performance
+        rememberLastUsedCamera: true, // Optimize by reusing the same camera
+        supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
       },
-      false,
+      false
     );
-
+    
     const processSuccess = async (result: string) => {
       setIsPending(true);
       await handleAuth(result);
