@@ -27,7 +27,7 @@ const QRScanner = () => {
     setShowResult(false);
     setIsPending(false);
     lastScannedCode.current = null; // Reset the last scanned code
-
+    qrScannerRef.current =null;
   };
 
   const getMessage = () => {
@@ -81,7 +81,9 @@ const QRScanner = () => {
     
     const error = (err: Error) => {
       console.warn(err.message);
-    };
+    }
+    
+    alert(videoRef.current);
   
     if (videoRef.current) {
       qrScannerRef.current = new QrScanner(
