@@ -48,9 +48,7 @@ const QRScanner = () => {
     const handleAuth = async (fromqr: string) => {
       const data = { code: fromqr };
   
-      try {
-        console.log(`API call started at: ${new Date(startTime).toLocaleTimeString()}`);
-  
+      try {  
         const res = await fetch("/api/check", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -70,7 +68,6 @@ const QRScanner = () => {
   
     const processSuccess = async (result: string) => {
       setIsPending(true);
-      console.log(`QR code scanned: ${result}`);
       await handleAuth(result);
     };
   
