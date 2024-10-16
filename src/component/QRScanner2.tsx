@@ -34,6 +34,13 @@ const QRScanner = () => {
       }
   };
 
+  
+  const processSuccess = async (result: string) => {
+    setIsPending(true);
+    console.log(`QR code scanned: ${result}`);
+    await handleAuth(result);
+  };
+
   const getMessage = () => {
     if (response?.status !== "valid") {
       return "Invalid QR";
@@ -44,54 +51,22 @@ const QRScanner = () => {
     }
   };
 
-  useEffect(() => {
-    const handleAuth = async (fromqr: string) => {
-      const data = { code: fromqr };
+  
+  const success = (result: string) => {
+    if (!showResult && result !== lastScannedCode.current && !isPending) {
+      lastScannedCode.current = result;
+      void processSuccess(result);
+      qrScannerRef.current?.stop()
+    }
+  };
 
-      try {
-        const startTime = Date.now(); // Start timing the API call
-        console.log(`API call started at: ${new Date(startTime).toLocaleTimeString()}`);
+  
+  const error = (err: Error) => {
+    console.warn(err.message);
+  };
 
-        const res = await fetch("/api/check", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const result: responseType = await res.json();
-        const endTime = Date.now(); // End timing the API call
-        const duration = endTime - startTime;
-
-        setApiDuration(duration);
-        setShowResult(true);
-        setResponse(result);
-
-        console.log(`API call ended at: ${new Date(endTime).toLocaleTimeString()}`);
-        console.log(`Time taken for API response: ${apiDuration}ms`);
-      } catch (error) {
-        console.error("Failed to fetch", error);
-      }
-    };
-
-    const processSuccess = async (result: string) => {
-      setIsPending(true);
-      console.log(`QR code scanned: ${result}`);
-      await handleAuth(result);
-    };
-
-    const success = (result: string) => {
-      if (!showResult && result !== lastScannedCode.current && !isPending) {
-        lastScannedCode.current = result;
-        void processSuccess(result);
-        qrScannerRef.current?.stop()
-      }
-    };
-
-    const error = (err: Error) => {
-      console.warn(err.message);
-    };
-
+  const init = () => {
     if (videoRef.current) {
       qrScannerRef.current = new QrScanner(
         videoRef.current,
@@ -101,9 +76,49 @@ const QRScanner = () => {
           preferredCamera: "environment", // Use the rear camera for better focus on phones
         }
       );
-      qrScannerRef.current.start().catch(error);
     }
-    
+  }
+
+  const handleAuth = async (fromqr: string) => {
+    const data = { code: fromqr };
+
+    try {
+      const startTime = Date.now(); // Start timing the API call
+      console.log(`API call started at: ${new Date(startTime).toLocaleTimeString()}`);
+
+      const res = await fetch("/api/check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const result: responseType = await res.json();
+      const endTime = Date.now(); // End timing the API call
+      const duration = endTime - startTime;
+
+      setApiDuration(duration);
+      setShowResult(true);
+      setResponse(result);
+
+      console.log(`API call ended at: ${new Date(endTime).toLocaleTimeString()}`);
+      console.log(`Time taken for API response: ${apiDuration}ms`);
+    } catch (error) {
+      console.error("Failed to fetch", error);
+    }
+  };
+
+
+
+  useEffect(() => {
+    init()
+
+    if(qrScannerRef.current){
+      qrScannerRef.current.start().catch(error);
+    }else{
+      alert("Failed to start scanner")
+    }
+
   }, [isPending, showResult]);
 
   return (
