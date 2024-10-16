@@ -97,9 +97,7 @@ const QRScanner = () => {
             <CardTitle className="text-2xl font-bold text-center">Scanner</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="w-64 h-64 object-cover">
             <video ref={videoRef} className="w-64 h-64" />
-          </div>
         </CardContent>
     </Card>
       {showResult && (
