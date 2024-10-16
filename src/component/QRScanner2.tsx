@@ -44,6 +44,7 @@ const QRScanner2 = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         });
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const result: responseType = await res.json();
         setShowResult(true);
         setResponse(result);
