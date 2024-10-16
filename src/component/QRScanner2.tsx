@@ -22,12 +22,13 @@ const QRScanner = () => {
   const videoRef = useRef<HTMLVideoElement  | null>(null);
   const qrScannerRef = useRef<QrScanner | null>(null); // UseRef for qrScanner instance
   const [apiDuration, setApiDuration] = useState<number | null>(null); // To store API call duration
+  const [count,setCount] = useState<number>(0);
 
   const handleConfirm = () => {
     setShowResult(false);
     setIsPending(false);
     lastScannedCode.current = null; // Reset the last scanned code
-
+    setCount(count+1)
   };
 
   const getMessage = () => {
@@ -100,7 +101,7 @@ const QRScanner = () => {
       qrScannerRef.current = null
     }
 
-  }, [isPending, showResult, lastScannedCode]);
+  }, [count, isPending, showResult, lastScannedCode]);
 
   return (
     <>
