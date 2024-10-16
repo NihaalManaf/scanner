@@ -106,7 +106,6 @@ const QRScanner = () => {
 
     return () => {
       qrScannerRef.current?.stop();
-      qrScannerRef.current = null;
     };
   }, [isPending, showResult]);
 
