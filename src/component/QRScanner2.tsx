@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import QrScanner from "qr-scanner";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/components/ui/card"
 
 interface responseType {
   status: string;
@@ -20,6 +19,7 @@ const QRScanner = () => {
   const lastScannedCode = useRef<string | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const qrScannerRef = useRef<QrScanner | null>(null); // UseRef for qrScanner instance
+  const [apiDuration, setApiDuration] = useState<number | null>(null); // To store API call duration
 
   const handleConfirm = () => {
     setShowResult(false);
@@ -42,15 +42,26 @@ const QRScanner = () => {
       const data = { code: fromqr };
 
       try {
+        const startTime = Date.now(); // Start timing the API call
+        console.log(`API call started at: ${new Date(startTime).toLocaleTimeString()}`);
+
         const res = await fetch("/api/check", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         });
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
         const result: responseType = await res.json();
+        const endTime = Date.now(); // End timing the API call
+        const duration = endTime - startTime;
+
+        setApiDuration(duration);
         setShowResult(true);
         setResponse(result);
+
+        console.log(`API call ended at: ${new Date(endTime).toLocaleTimeString()}`);
+        console.log(`Time taken for API response: ${duration}ms`);
+        console.log("API Response:", result);
       } catch (error) {
         console.error("Failed to fetch", error);
       }
@@ -58,6 +69,7 @@ const QRScanner = () => {
 
     const processSuccess = async (result: string) => {
       setIsPending(true);
+      console.log(`QR code scanned: ${result}`);
       await handleAuth(result);
     };
 
@@ -92,14 +104,9 @@ const QRScanner = () => {
 
   return (
     <>
-      <Card className="w-[17rem] overflow-hidden">
-        <CardHeader className="p-4 bg-muted">
-            <CardTitle className="text-2xl font-bold text-center">Scanner</CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-            <video ref={videoRef} className="w-64 h-64" />
-        </CardContent>
-    </Card>
+      <div className="w-96 flex flex-col justify-center items-center">
+        <video ref={videoRef} style={{ width: "250px", height: "250px" }} />
+      </div>
       {showResult && (
         <div
           className={`fixed top-0 left-0 w-full h-full flex justify-center items-center ${
