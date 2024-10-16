@@ -30,7 +30,7 @@ const QRScanner = () => {
 
       // Restart the QR scanner to continue scanning
       if (qrScannerRef.current) {
-        qrScannerRef.current.start().catch((err) => console.error("Failed to restart scanner", err));
+        qrScannerRef.current.start().catch((err) => alert("Failed to restart scanner"));
       }
   };
 
@@ -103,10 +103,7 @@ const QRScanner = () => {
       );
       qrScannerRef.current.start().catch(error);
     }
-
-    return () => {
-      qrScannerRef.current?.stop();
-    };
+    
   }, [isPending, showResult]);
 
   return (
