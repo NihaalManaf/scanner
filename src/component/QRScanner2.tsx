@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import QrScanner from "qr-scanner";
-import { Card, CardContent,CardHeader } from "~/components/ui/card";
+import { Card, CardTitle, CardContent,CardHeader } from "~/components/ui/card";
 
 
 interface responseType {
