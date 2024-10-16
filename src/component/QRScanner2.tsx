@@ -19,7 +19,7 @@ const QRScanner = () => {
   const [response, setResponse] = useState<responseType | null>(null);
   const [isPending, setIsPending] = useState<boolean>(false);
   const lastScannedCode = useRef<string | null>(null);
-  const videoRef = useRef<a | null>(null);
+  const videoRef = useRef<HTMLVideoElement  | null>(null);
   const qrScannerRef = useRef<QrScanner | null>(null); // UseRef for qrScanner instance
   const [apiDuration, setApiDuration] = useState<number | null>(null); // To store API call duration
 
