@@ -29,8 +29,17 @@ const QRScanner = () => {
     lastScannedCode.current = null; // Reset the last scanned code
 
       // Restart the QR scanner to continue scanning
-      if (qrScannerRef.current) {
-        qrScannerRef.current.start().catch((err) => alert("Failed to restart scanner"));
+      if (qrScannerRef.current && videoRef.current) {
+        
+        qrScannerRef.current = new QrScanner(
+          videoRef.current,
+          (result) => success(result.data),
+          {
+            returnDetailedScanResult: true,
+            preferredCamera: "environment", // Use the rear camera for better focus on phones
+          }
+        );
+        qrScannerRef.current.start().catch(error);
       }
   };
 
@@ -44,47 +53,56 @@ const QRScanner = () => {
     }
   };
 
+  const handleAuth = async (fromqr: string) => {
+    const data = { code: fromqr };
+
+    try {
+      const startTime = Date.now(); // Start timing the API call
+      console.log(`API call started at: ${new Date(startTime).toLocaleTimeString()}`);
+
+      const res = await fetch("/api/check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const result: responseType = await res.json();
+      const endTime = Date.now(); // End timing the API call
+      const duration = endTime - startTime;
+
+      setApiDuration(duration);
+      setShowResult(true);
+      setResponse(result);
+
+      console.log(`API call ended at: ${new Date(endTime).toLocaleTimeString()}`);
+      console.log(`Time taken for API response: ${apiDuration}ms`);
+    } catch (error) {
+      console.error("Failed to fetch", error);
+    }
+  };
+
+  const processSuccess = async (result: string) => {
+    setIsPending(true);
+    console.log(`QR code scanned: ${result}`);
+    await handleAuth(result);
+  };
+
+  const success = (result: string) => {
+    if (!showResult && result !== lastScannedCode.current && !isPending) {
+      lastScannedCode.current = result;
+      void processSuccess(result);
+      qrScannerRef.current?.stop()
+    }
+  };
+  
+  const error = (err: Error) => {
+    console.warn(err.message);
+  };
+
+
   useEffect(() => {
-    const handleAuth = async (fromqr: string) => {
-      const data = { code: fromqr };
-
-      try {
-        const res = await fetch("/api/check", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const result: responseType = await res.json();
-
-        setShowResult(true);
-        setResponse(result);
-
-      } catch (error) {
-        console.error("Failed to fetch", error);
-      }
-    };
-
-    const processSuccess = async (result: string) => {
-      setIsPending(true);
-      await handleAuth(result);
-    };
-
-    const success = (result: string) => {
-      if (!showResult && result !== lastScannedCode.current && !isPending) {
-        lastScannedCode.current = result;
-        void processSuccess(result);
-        qrScannerRef.current?.stop()
-      } else if(result == lastScannedCode.current) {
-        alert("Code has been scanned already ");
-      }
-    };
-
-    const error = (err: Error) => {
-      console.warn(err.message);
-    };
-
+    
     if (videoRef.current) {
       qrScannerRef.current = new QrScanner(
         videoRef.current,
@@ -97,6 +115,9 @@ const QRScanner = () => {
       qrScannerRef.current.start().catch(error);
     }
 
+    return () => {
+      qrScannerRef.current?.stop();
+    };
   }, [isPending, showResult]);
 
   return (
