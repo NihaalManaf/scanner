@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import QrScanner from "qr-scanner";
+import { Card, CardContent,CardHeader } from "~/components/ui/card";
+
 
 interface responseType {
   status: string;
@@ -25,6 +27,11 @@ const QRScanner = () => {
     setShowResult(false);
     setIsPending(false);
     lastScannedCode.current = null; // Reset the last scanned code
+
+      // Restart the QR scanner to continue scanning
+      if (qrScannerRef.current) {
+        qrScannerRef.current.start().catch((err) => console.error("Failed to restart scanner", err));
+      }
   };
 
   const getMessage = () => {
@@ -50,7 +57,7 @@ const QRScanner = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         });
-        
+
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const result: responseType = await res.json();
         const endTime = Date.now(); // End timing the API call
@@ -61,8 +68,7 @@ const QRScanner = () => {
         setResponse(result);
 
         console.log(`API call ended at: ${new Date(endTime).toLocaleTimeString()}`);
-        console.log(`Time taken for API response: ${duration}ms`);
-        console.log("API Response:", result);
+        console.log(`Time taken for API response: ${apiDuration}ms`);
       } catch (error) {
         console.error("Failed to fetch", error);
       }
@@ -78,6 +84,7 @@ const QRScanner = () => {
       if (!showResult && result !== lastScannedCode.current && !isPending) {
         lastScannedCode.current = result;
         void processSuccess(result);
+        qrScannerRef.current?.stop()
       }
     };
 
@@ -105,9 +112,14 @@ const QRScanner = () => {
 
   return (
     <>
-      <div className="w-96 flex flex-col justify-center items-center">
-        <video ref={videoRef} style={{ width: "250px", height: "250px" }} />
-      </div>
+      <Card className="w-[17rem] overflow-hidden">
+        <CardHeader className="p-4 bg-muted">
+            <CardTitle className="text-2xl font-bold text-center">Scanner</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+            <video ref={videoRef} className="w-64 h-64" />
+        </CardContent>
+    </Card>
       {showResult && (
         <div
           className={`fixed top-0 left-0 w-full h-full flex justify-center items-center ${
