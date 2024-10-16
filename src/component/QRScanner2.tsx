@@ -91,7 +91,6 @@ const QRScanner = () => {
         {
           returnDetailedScanResult: true,
           highlightScanRegion: true,
-          highlightCodeOutline: true,
           preferredCamera: "environment", // Use the rear camera for better focus on phones
         }
       );
