@@ -92,13 +92,13 @@ const QRScanner = () => {
 
   return (
     <>
-      <Card className="w-[24rem] overflow-hidden">
+      <Card className="w-[17rem] overflow-hidden">
         <CardHeader className="p-4 bg-muted">
             <CardTitle className="text-2xl font-bold text-center">Scanner</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="w-96 h-96 object-cover">
-            <video ref={videoRef} className="w-96 h-96" style={{ width: "250px", height: "250px" }} />
+          <div className="w-64 h-64 object-cover">
+            <video ref={videoRef} className="w-64 h-64" />
           </div>
         </CardContent>
     </Card>
