@@ -101,7 +101,7 @@ const QRScanner = () => {
       qrScannerRef.current = null
     }
 
-  }, [count, isPending, showResult, lastScannedCode]);
+  }, [count]);
 
   return (
     <>
