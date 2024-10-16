@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import QrScanner from "qr-scanner";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
 interface responseType {
   status: string;
@@ -91,9 +92,16 @@ const QRScanner = () => {
 
   return (
     <>
-      <div className="w-96 flex flex-col justify-center items-center">
-        <video ref={videoRef} style={{ width: "250px", height: "250px" }} />
-      </div>
+      <Card className="w-[28rem] overflow-hidden">
+        <CardHeader className="p-4 bg-muted">
+            <CardTitle className="text-2xl font-bold text-center">Scanner</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="w-96 h-96 object-cover">
+            <video ref={videoRef} style={{ width: "250px", height: "250px" }} />
+          </div>
+        </CardContent>
+    </Card>
       {showResult && (
         <div
           className={`fixed top-0 left-0 w-full h-full flex justify-center items-center ${
