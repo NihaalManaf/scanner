@@ -22,7 +22,6 @@ export async function POST(req: NextRequest) {
       auth: env.SECRET_API_KEY,
       qr: code
     };
-
     console.log('Sending request to external API with code:', code);
 
     const response = await fetch("https://icsnavaratri-65310ca8dfd6.herokuapp.com/scan", {
