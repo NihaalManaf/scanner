@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
 
     console.log('Sending request to external API with code:', code);
 
-    const response = await fetch("https://nes-ac486dca6167.herokuapp.com/scan", {
+    const response = await fetch("https://concert-clarus-c19f92366f72.herokuapp.com/", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

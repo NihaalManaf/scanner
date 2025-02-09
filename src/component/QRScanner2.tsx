@@ -12,6 +12,7 @@ interface responseType {
   ticket_id: string;
   bookingId: string;
   ticket_number: string;
+  multi_ticket: string;
 }
 
 const QRScanner = () => {
@@ -40,7 +41,6 @@ const QRScanner = () => {
       return "Good to Enter";
     }
   };
-
 
 
   useEffect(() => {
@@ -130,6 +130,9 @@ const QRScanner = () => {
               <p className="text-gray-500">Booking ID : {response?.bookingId}</p>
               <p className="mt-4">
                 <b>CUST_ID</b> : {response?.name} # <b>{response?.ticket_number}</b>
+              </p>
+              <p className="mt-4">
+                <b>MULTI_TICKET</b> : {response?.name} # <b>{response?.multi_ticket}</b>
               </p>
             </div>
             <p className="font-bold text-2xl text-center m-8">{getMessage()}</p>
