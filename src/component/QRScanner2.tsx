@@ -129,10 +129,10 @@ const QRScanner = () => {
               </h1>
               <p className="text-gray-500">Booking ID : {response?.bookingId}</p>
               <p className="mt-4">
-                <b>CUST_ID</b> : {response?.name} # <b>{response?.ticket_number}</b>
+                <b>Name</b> : {response?.name} # <b>{response?.ticket_number}</b>
               </p>
               <p className="mt-4">
-                <b>MULTI_TICKET</b> : {response?.name} # <b>{response?.multi_ticket}</b>
+                <b>MULTI_TICKET</b> : {response?.multi_ticket}
               </p>
             </div>
             <p className="font-bold text-2xl text-center m-8">{getMessage()}</p>
